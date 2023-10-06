@@ -1,52 +1,67 @@
-from math import isclose
-import numpy as np
+import math
 import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle
+import numpy as np
 
-def func (a, x, b):
-    return a*x + b
+def is_intersecting(k, b):
+    #проверка пересечения прямой с горизонтальными границами прямоугольника
+    y1 = k * 1 + b
+    y2 = k * 2 + b
 
-def main ():
-    x1 = 1
-    x2 = 4
-    y1 = func(1, x1, 0)
-    y2 = func(1, x2, 0)
+    if (math.isclose(y1, 3, rel_tol = 1e-9) and math.isclose(y2, 4, rel_tol = 1e-9)) or \
+       (math.isclose(y2, 3, rel_tol = 1e-9) and math.isclose(y1, 4, rel_tol = 1e-9)):
+        return True
+    else:
+        return False
 
-    x_min = 1
-    x_max = 3
-    y_min = 2
-    y_max = 4
+def count_intersection_points(k, b):
+    count = 0 #количество точек пересечения
 
-    line = (x1, y1, x2, y2)
-    rectangle = (x_min, y_min, x_max, y_max)
-    print("line:", line, "rectangle:", rectangle) 
-    # if x1 < x_min and x2 < x_min:
-    #     return False
-    # if x1 > x_max and x2 > x_max:
-    #     return False
-    # if y1 < y_min and y2 < y_max:
-    #     return False
-    # if y1 > y_min and y2 > y_max:
-    #     return False
-    
-    # if x1 >= x_min and x2 <= x_max and y1 >= y_min and y2 <= y_max:
-    #     return True
+    #проверка пересечения прямой с вертикальными границами прямоугольника
+    x1 = (3 - b) / k if k != 0 else None
+    x2 = (4 - b) / k if k != 0 else None
 
-if __name__ == '__main__':
-    main()
+    if x1 is not None and 1 <= x1 <= 2:
+        count += 1
 
-    
-    #y = list(map(f, x))
+    if x2 is not None and 1 <= x2 <= 2:
+        count += 1
+
+    return count
+
+#ввод коэффициентов k и b
+k = float(input("Введите значение k: "))
+b = float(input("Введите значение b: "))
+
+#создание массива значений x для построения графика прямой
+x = np.linspace(0, 3, 400)
+y = k * x + b
+
+#построение графика прямой
+plt.plot(x, y, label = f'y = {k}x + {b}', color = 'blue')
+
+#построение прямоугольника
+plt.fill([1, 2, 2, 1], [3, 3, 4, 4], 'r', alpha = 0.3, label = 'Прямоугольник [1, 2] x [3, 4]')
+
+#установка оси и меток
+plt.xlim(0, 3)
+plt.ylim(0, 7)
+plt.xlabel('x')
+plt.ylabel('y')
+
+#проверка на пересечение и колличества точек пересечения
+if is_intersecting(k, b):
+    intersection_count = count_intersection_points(k, b)
+    plt.title(f"Количество точек пересечения: {intersection_count}")
+    print("\nКоличество точек пересечения:", intersection_count)
+else:
+    plt.title("Прямая не пересекается с прямоугольником")
+    print("\nПрямая не пересекается с прямоугольником")
+
+plt.legend()
+plt.grid(True)
+plt.show()
 
 
-     #for i in range(len(x)):
-    #    y = func(a, x[i], b)
-    #    list.append(y)
-    #    print("x =", x[i], "y =", y)
-    #    i += 1
 
 
-    #fig, ax = plt.subplots()
-    #ax.plot([0, 10],[0, 10])
-    #ax.add_patch (Rectangle((1, 2), 2, 2))
-    #plt.show()
+
