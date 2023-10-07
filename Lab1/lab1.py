@@ -5,10 +5,7 @@ import numpy as np
 def is_lying(k, b):
   #проверка принадлежности прямой горизонтальной границе прямоугольника
   if(math.isclose(k, 0, rel_tol = 1e-9)):
-      if(math.isclose(b, 3, rel_tol = 1e-9) or math.isclose(b, 4, rel_tol = 1e-9)):
-        return True
-      else:
-        return False
+      return math.isclose(b, 3, rel_tol = 1e-9) or math.isclose(b, 4, rel_tol = 1e-9) 
       
 def is_intersecting(k, b):
   #проверка пересечения прямой с горизонтальными границами прямоугольника
@@ -22,7 +19,7 @@ def is_intersecting(k, b):
     return True
   else:
       return False
-  
+
 def count_intersection_points(k, b):
   count = 0 #количество точек пересечения
 
@@ -86,8 +83,3 @@ else:
 plt.legend()
 plt.grid(True)
 plt.show()
-
-
-
-
-
